@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<style>
+
+.categories {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+
+.categories-choropleth {
+  fill: #ccc;
+}
+
+#tooltip-container {
+  position: absolute;
+  background-color: #fff;
+  color: #000;
+  padding: 10px;
+  border: 1px solid;
+  display: none;
+}
+
+#canvas svg {
+  border: 0px;
+}
+
+.tooltip_key {
+  font-weight: bold;
+}
+
+.tooltip_value {
+  margin-left: 20px;
+  float: right;
+}
+
+  
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+.q8-9 { fill:rgb(8,48,107); }
+
+</style>
+
+<div id="tooltip-container">
+  
+</div>
+
+<div id="canvas-svg">
+  <h1 align="center">The Comparisons across The States of Different Diseases For Measles</h1>
+</div>
+
+<div id="year-btns"></div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var WIDTH = 800, HEIGHT = 400;
+
+var COLOR_COUNTS = 9;
+
+var SCALE = 0.7;
+
+function Interpolate(start, end, steps, count) {
+    var s = start,
+        e = end,
+        final = s + (((e - s) / steps) * count);
+    return Math.floor(final);
+}
+
+function Color(_r, _g, _b) {
+    var r, g, b;
+    var setColors = function(_r, _g, _b) {
+        r = _r;
+        g = _g;
+        b = _b;
+    };
+
+    setColors(_r, _g, _b);
+    this.getColors = function() {
+        var colors = {
+            r: r,
+            g: g,
+            b: b
+        };
+        return colors;
+    };
+}
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+var COLOR_FIRST = "#c3e2ff", COLOR_LAST = "#08306B";
+
+var rgb = hexToRgb(COLOR_FIRST);
+
+var COLOR_START = new Color(rgb.r, rgb.g, rgb.b);
+
+rgb = hexToRgb(COLOR_LAST);
+var COLOR_END = new Color(rgb.r, rgb.g, rgb.b);
+
+var MAP_CATEGORY = "name";
+var MAP_VALUE; // set later below
+
+var width = WIDTH,
+    height = HEIGHT;
+
+var valueById = d3.map();
+
+var startColors = COLOR_START.getColors(),
+    endColors = COLOR_END.getColors();
+
+var colors = [];
+
+for (var i = 0; i < COLOR_COUNTS; i++) {
+  var r = Interpolate(startColors.r, endColors.r, COLOR_COUNTS, i);
+  var g = Interpolate(startColors.g, endColors.g, COLOR_COUNTS, i);
+  var b = Interpolate(startColors.b, endColors.b, COLOR_COUNTS, i);
+  colors.push(new Color(r, g, b));
+}
+
+var quantize = d3.scale.quantize()
+    .domain([0, 1.0])
+    .range(d3.range(COLOR_COUNTS).map(function(i) { return i }));
+
+var path = d3.geo.path();
+
+var svg = d3.select("#canvas-svg").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+d3.csv("map3.csv", function (error, data) {
+
+name_id_map = {};
+id_name_map = {};
+
+for (var i = 0; i < data.length; i++) {
+  name_id_map[data[i].name] = data[i].id;
+  id_name_map[data[i].id] = data[i].name;
+}
+
+data.forEach(function (d) {
+  var id = name_id_map[d.name];
+  valueById.set(id, +d.value); 
+});
+
+quantize.domain([d3.min(data, function (d){ return +d.value }),
+  d3.max(data, function (d){ return +d.value })]);
+
+function initDataByValue() {
+  data.forEach(function(d) {
+    var id = name_id_map[d[MAP_CATEGORY]];
+    valueById.set(id, +d[MAP_VALUE]); 
+  });
+  
+  quantize.domain([d3.min(data, function(d){ return +d[MAP_VALUE] }),
+    d3.max(data, function(d){ return +d[MAP_VALUE] })]);
+}
+
+function makeMap(us) {
+  svg.append("g")
+      .attr("class", "categories-choropleth")
+    .selectAll("path")
+      .data(us.features)
+    .enter().append("path")
+      .attr("transform", "scale(" + SCALE + ")")
+      .attr("class","feature")
+      .attr("stroke","black")
+      .style("fill", function(d) {
+        if (valueById.get(d.id)) {
+          var i = quantize(valueById.get(d.id));
+          var color = colors[i].getColors();
+          return "rgb(" + color.r + "," + color.g +
+              "," + color.b + ")";
+        } else {
+          return "white";
+        }
+      })
+      .attr("d", path)
+      .on("mousemove", function(d) {
+          var html = "";
+
+          html += "<div class=\"tooltip_kv\">";
+          html += "<span class=\"tooltip_key\">";
+          html += id_name_map[d.id];
+          html += "</span>";
+          html += "<span class=\"tooltip_value\">";
+          html += (valueById.get(d.id) ? valueById.get(d.id) : "");
+          html += "";
+          html += "</span>";
+          html += "</div>";
+          
+          $("#tooltip-container").html(html);
+          $(this).attr("fill-opacity", "0.8");
+          $("#tooltip-container").show();
+          
+          var coordinates = d3.mouse(this);
+          
+          var map_width = $('.categories-choropleth')[0].getBoundingClientRect().width;
+          
+          if (d3.event.pageX < map_width / 2) {
+            d3.select("#tooltip-container")
+              .style("top", (d3.event.pageY + 15) + "px")
+              .style("left", (d3.event.pageX + 15) + "px");
+          } else {
+            var tooltip_width = $("#tooltip-container").width();
+            d3.select("#tooltip-container")
+              .style("top", (d3.event.pageY + 15) + "px")
+              .style("left", (d3.event.pageX - tooltip_width - 30) + "px");
+          }
+      })
+      .on("mouseout", function() {
+              $(this).attr("fill-opacity", "1.0");
+              $("#tooltip-container").hide();
+          });
+
+  svg.append("path")
+      .datum(topojson.mesh(us.features, function(a, b) { return a !== b; }))
+      .attr("class", "categories")
+      .attr("transform", "scale(" + SCALE + ")")
+      .attr("d", path);
+}
+
+d3.json("us-states.json", function(error, us) {
+  makeMap(us);
+});
+
+// find all years
+var first_dp = data[0];
+var ALL_YEARS = [];
+for (i = 0; i < Object.keys(first_dp).length; i++) {
+  if (Object.keys(first_dp)[i] !== MAP_CATEGORY && Object.keys(first_dp)[i] !== "id" && Object.keys(first_dp)[i] !=="code") {
+    ALL_YEARS.push(Object.keys(first_dp)[i]);
+  }
+}
+
+for (i = 0; i < ALL_YEARS.length; i++) {
+  $("#year-btns").append($("<button></button>")
+    .attr("class", "btn btn-year")
+    .attr("year", ALL_YEARS[i])
+    .attr("id", "btn-year-" + ALL_YEARS[i])
+    .html(ALL_YEARS[i])
+  );
+}
+
+$(".btn-year").on("click", function(e) {
+  $(".btn-year.active").removeClass("active");
+  $(this).addClass("active");
+  MAP_VALUE = $(this).attr("year");
+  initDataByValue();
+  transitionMap();
+});
+
+// select first map value
+MAP_VALUE = ALL_YEARS[0];
+$("#btn-year-" + MAP_VALUE).click();
+
+function transitionMap() {
+  var map_group = d3.select(".categories-choropleth");
+    
+  map_group
+    .selectAll("path")
+      .attr("transform", "scale(" + SCALE + ")")
+      .style("fill", function(d) {
+        if (valueById.get(d.id)) {
+          var i = quantize(valueById.get(d.id));
+          var color = colors[i].getColors();
+          return "rgb(" + color.r + "," + color.g +
+              "," + color.b + ")";
+        } else {
+          return "";
+        }
+      })
+      .attr("d", path);
+}
+
+initDataByValue();
+
+// animate click of years
+var year_count = 1;
+function clickYearButton() {
+  if (year_count < ALL_YEARS.length) {
+    MAP_VALUE = ALL_YEARS[year_count];
+    $("#btn-year-" + MAP_VALUE).click();
+    year_count++;
+    animateClicks();
+  }
+}
+
+function animateClicks() {
+  setTimeout(clickYearButton, 1000);
+}
+
+animateClicks();
+
+
+
+
+});
+
+
+
+
+
+
+
+</script>
+</head>
+
+<body>
+  <aside style="margin-top:40px;">
+<p>Order: <select id="my_selection">
+
+<option value="">----</option>
+<option value="y" href="file:///Users/fujun/Dropbox/Visual/Final_Project/Map1.html" >SmallPox</option>
+<option value="z" href="file:///Users/fujun/Dropbox/Visual/Final_Project/Map2.html">Polio</option>
+<option value="x" href="file:///Users/fujun/Dropbox/Visual/Final_Project/Map3.html" target="_blank" style="text-decoration:none">Measles</option>
+</select>
+<script>
+document.getElementById('my_selection').onchange = function() {
+    window.location.href = this.children[this.selectedIndex].getAttribute('href');
+}
+</script>
+<br>
+<p style="text-align:right"><a href="file:///Users/fujun/Dropbox/Visual/Final_Project/Index.html" style="text-decoration:none, font-size:50%">Back to index</font></a></p>
+</body>
+

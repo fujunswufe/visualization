@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+
+<style type="text/css">
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 15px;
+  padding: 8px;
+  font: 10px sans-serif;
+  background: #dbe3e4;
+  border: solid 1px #aaa;
+  border-radius: 8px;
+  pointer-events: none;
+  }
+ 
+{
+  font: 10px sans-serif;
+}
+
+path {
+        stroke: steelblue;
+        stroke-width: 2;
+        fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: lightpink;
+  stroke-width: 1.5px;
+}
+</style>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+
+function getValue(){
+
+  d3.select("svg").remove()
+
+var e1 = document.getElementById("disease");
+var disease = e1.options[e1.selectedIndex].value;
+
+  var e2 = document.getElementById("state");
+var state = e2.options[e2.selectedIndex].value;
+
+// set the dimension of the canvas
+  var margin = {top: 20, right: 60, bottom: 30, left: 320},
+      width = 900 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+// parse the date
+  var parseDate = d3.time.format("%Y").parse;
+  var formatTime = d3.time.format("%Y");
+
+//set the ranges
+  var x = d3.time.scale().range([0, width]);
+
+  var y = d3.scale.linear().range([height, 0]);
+
+  var color = d3.scale.category10();
+
+// define the axes
+  var xAxis = d3.svg.axis().scale(x)
+      .orient("bottom").ticks(8);
+
+  var yAxis = d3.svg.axis().scale(y)
+      .orient("left");
+
+// define the line
+  var line = d3.svg.line()
+      .interpolate("linear")
+      .x(function(d) { return x(d.date); })
+      .y(function(d) { return y(d.Alabama); });
+
+
+  var div = d3.select("body").append("div") .attr("class", "tooltip") .style("opacity", 0);
+
+//add the svg canvas
+  var container = d3.select("body")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+
+  var svg = container.append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+if(disease=="sm"){
+// get the data
+d3.csv("line1.csv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+
+    if(state=="Alabama") {
+      d.Alabama = +d.Alabama;
+    } else if (state=="Alaska") {
+      d.Alabama = +d.Alaska;
+    } else if (state=="Arizona") {
+      d.Alabama = +d.Arizona;
+    } else if (state=="Arkansas") {
+      d.Alabama = +d.Arkansas;
+    } else if (state=="California") {
+      d.Alabama = +d.California;
+    } else if (state=="Colorado") {
+      d.Alabama = +d.Colorado;
+    } else if (state=="Connecticut") {
+      d.Alabama = +d.Connecticut;
+    } else if (state=="Delaware") {
+      d.Alabama = +d.Delaware;
+    } else if (state=="District_of_Columbia") {
+      d.Alabama = +d.District_of_Columbia;
+    } else if (state=="Florida") {
+      d.Alabama = +d.Florida;
+    } else if (state=="Georgia") {
+      d.Alabama = +d.Georgia;
+    } else if (state=="Hawaii") {
+      d.Alabama = +d.Hawaii;
+    } else if (state=="Idaho") {
+      d.Alabama = +d.Idaho;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Indiana") {
+      d.Alabama = +d.Indiana;
+    } else if (state=="Iowa") {
+      d.Alabama = +d.Iowa;
+    } else if (state=="Kansas") {
+      d.Alabama = +d.Kansas;
+    } else if (state=="Kentucky") {
+      d.Alabama = +d.Kentucky;
+    } else if (state=="Louisiana") {
+      d.Alabama = +d.Louisiana;
+    } else if (state=="Maine") {
+      d.Alabama = +d.Maine;
+    } else if (state=="Maryland") {
+      d.Alabama = +d.Maryland;
+    } else if (state=="Massachusetts") {
+      d.Alabama = +d.Massachusetts;
+    } else if (state=="Michigan") {
+      d.Alabama = +d.Michigan;
+    } else if (state=="Minnesota") {
+      d.Alabama = +d.Minnesota;
+    } else if (state=="Mississippi") {
+      d.Alabama = +d.Mississippi;
+    } else if (state=="Missouri") {
+      d.Alabama = +d.Missouri;
+    } else if (state=="Montana") {
+      d.Alabama = +d.Montana;
+    } else if (state=="Nebraska") {
+      d.Alabama = +d.Nebraska;
+    } else if (state=="Nevada") {
+      d.Alabama = +d.Nevada;
+    } else if (state=="New_Hampshire") {
+      d.Alabama = +d.New_Hampshire;
+    } else if (state=="New_Jersey") {
+      d.Alabama = +d.New_Jersey;
+    } else if (state=="New_Mexico") {
+      d.Alabama = +d.New_Mexico;
+    } else if (state=="New_York") {
+      d.Alabama = +d.New_York;
+    } else if (state=="North_Carolina") {
+      d.Alabama = +d.North_Carolina;
+    } else if (state=="North_Dakota") {
+      d.Alabama = +d.North_Dakota;
+    } else if (state=="Ohio") {
+      d.Alabama = +d.Ohio;
+    } else if (state=="Oklahoma") {
+      d.Alabama = +d.Oklahoma;
+    } else if (state=="Oregon") {
+      d.Alabama = +d.Oregon;
+    } else if (state=="Pennsylvania") {
+      d.Alabama = +d.Pennsylvania;
+    } else if (state=="Rhode_Island") {
+      d.Alabama = +d.Rhode_Island;
+    } else if (state=="South_Carolina") {
+      d.Alabama = +d.South_Carolina;
+    } else if (state=="South_Dakota") {
+      d.Alabama = +d.South_Dakota;
+    } else if (state=="Tennessee") {
+      d.Alabama = +d.Tennessee;
+    } else if (state=="Texas") {
+      d.Alabama = +d.Texas;
+    } else if (state=="Utah") {
+      d.Alabama = +d.Utah;
+    } else if (state=="Vermont") {
+      d.Alabama = +d.Vermont;
+    } else if (state=="Virginia") {
+      d.Alabama = +d.Virginia;
+    } else if (state=="Washington") {
+      d.Alabama = +d.Washington;
+    } else if (state=="West_Virginia") {
+      d.Alabama = +d.West_Virginia;
+    } else if (state=="Wisconsin") {
+      d.Alabama = +d.Wisconsin;
+    } else if (state=="Wyoming") {
+      d.Alabama = +d.Wyoming;
+    } 
+
+  });
+
+//scale the range of data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([0, d3.max(data, function(d) { return d.Alabama ;})]);
+
+//add the line path
+  svg.append("path")    
+    .attr("class", "line")
+    .attr("d", line(data));
+
+  svg.selectAll("dot")
+        .data(data)
+        .enter().append("circle")
+        .attr("r", 3.5)
+        .attr("cx", function(d) { return x(d.date); }) .attr("cy", function(d) { return y(d.Alabama); })
+        .on("mouseover", function(d) {
+            div.transition()
+               .duration(200)
+               .style("opacity", .7);
+            div.html("Year:"+formatTime(d.date) + "<br/>" + "Cases:"+d.Alabama)
+               .style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY)  + "px");
+              })
+        .on("mouseout", function(d) { div.transition()
+        .duration(500)
+        .style("opacity", 0);
+});
+ 
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .text("Year")
+      .attr('transform', 'translate(' + width + ', 0)');
+
+//add the y axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("smallpox cases in Alabama");
+
+
+});
+}//end sm
+else if(disease=="po"){
+    d3.csv("line2.csv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+
+    if(state=="Alabama") {
+      d.Alabama = +d.Alabama;
+    } else if (state=="Alaska") {
+      d.Alabama = +d.Alaska;
+    } else if (state=="Arizona") {
+      d.Alabama = +d.Arizona;
+    } else if (state=="Arkansas") {
+      d.Alabama = +d.Arkansas;
+    } else if (state=="California") {
+      d.Alabama = +d.California;
+    } else if (state=="Colorado") {
+      d.Alabama = +d.Colorado;
+    } else if (state=="Connecticut") {
+      d.Alabama = +d.Connecticut;
+    } else if (state=="Delaware") {
+      d.Alabama = +d.Delaware;
+    } else if (state=="District_of_Columbia") {
+      d.Alabama = +d.District_of_Columbia;
+    } else if (state=="Florida") {
+      d.Alabama = +d.Florida;
+    } else if (state=="Georgia") {
+      d.Alabama = +d.Georgia;
+    } else if (state=="Hawaii") {
+      d.Alabama = +d.Hawaii;
+    } else if (state=="Idaho") {
+      d.Alabama = +d.Idaho;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Indiana") {
+      d.Alabama = +d.Indiana;
+    } else if (state=="Iowa") {
+      d.Alabama = +d.Iowa;
+    } else if (state=="Kansas") {
+      d.Alabama = +d.Kansas;
+    } else if (state=="Kentucky") {
+      d.Alabama = +d.Kentucky;
+    } else if (state=="Louisiana") {
+      d.Alabama = +d.Louisiana;
+    } else if (state=="Maine") {
+      d.Alabama = +d.Maine;
+    } else if (state=="Maryland") {
+      d.Alabama = +d.Maryland;
+    } else if (state=="Massachusetts") {
+      d.Alabama = +d.Massachusetts;
+    } else if (state=="Michigan") {
+      d.Alabama = +d.Michigan;
+    } else if (state=="Minnesota") {
+      d.Alabama = +d.Minnesota;
+    } else if (state=="Mississippi") {
+      d.Alabama = +d.Mississippi;
+    } else if (state=="Missouri") {
+      d.Alabama = +d.Missouri;
+    } else if (state=="Montana") {
+      d.Alabama = +d.Montana;
+    } else if (state=="Nebraska") {
+      d.Alabama = +d.Nebraska;
+    } else if (state=="Nevada") {
+      d.Alabama = +d.Nevada;
+    } else if (state=="New_Hampshire") {
+      d.Alabama = +d.New_Hampshire;
+    } else if (state=="New_Jersey") {
+      d.Alabama = +d.New_Jersey;
+    } else if (state=="New_Mexico") {
+      d.Alabama = +d.New_Mexico;
+    } else if (state=="New_York") {
+      d.Alabama = +d.New_York;
+    } else if (state=="North_Carolina") {
+      d.Alabama = +d.North_Carolina;
+    } else if (state=="North_Dakota") {
+      d.Alabama = +d.North_Dakota;
+    } else if (state=="Ohio") {
+      d.Alabama = +d.Ohio;
+    } else if (state=="Oklahoma") {
+      d.Alabama = +d.Oklahoma;
+    } else if (state=="Oregon") {
+      d.Alabama = +d.Oregon;
+    } else if (state=="Pennsylvania") {
+      d.Alabama = +d.Pennsylvania;
+    } else if (state=="Rhode_Island") {
+      d.Alabama = +d.Rhode_Island;
+    } else if (state=="South_Carolina") {
+      d.Alabama = +d.South_Carolina;
+    } else if (state=="South_Dakota") {
+      d.Alabama = +d.South_Dakota;
+    } else if (state=="Tennessee") {
+      d.Alabama = +d.Tennessee;
+    } else if (state=="Texas") {
+      d.Alabama = +d.Texas;
+    } else if (state=="Utah") {
+      d.Alabama = +d.Utah;
+    } else if (state=="Vermont") {
+      d.Alabama = +d.Vermont;
+    } else if (state=="Virginia") {
+      d.Alabama = +d.Virginia;
+    } else if (state=="Washington") {
+      d.Alabama = +d.Washington;
+    } else if (state=="West_Virginia") {
+      d.Alabama = +d.West_Virginia;
+    } else if (state=="Wisconsin") {
+      d.Alabama = +d.Wisconsin;
+    } else if (state=="Wyoming") {
+      d.Alabama = +d.Wyoming;
+    } 
+
+  });
+
+//scale the range of data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([0, d3.max(data, function(d) { return d.Alabama ;})]);
+
+//add the line path
+  svg.append("path")    
+    .attr("class", "line")
+    .attr("d", line(data));
+
+  svg.selectAll("dot")
+        .data(data)
+        .enter().append("circle")
+        .attr("r", 3.5)
+        .attr("cx", function(d) { return x(d.date); }) .attr("cy", function(d) { return y(d.Alabama); })
+        .on("mouseover", function(d) {
+            div.transition()
+               .duration(200)
+               .style("opacity", .7);
+            div.html("Year:"+formatTime(d.date) + "<br/>" + "Cases:"+d.Alabama)
+               .style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY)  + "px");
+              })
+        .on("mouseout", function(d) { div.transition()
+        .duration(500)
+        .style("opacity", 0);
+});
+ 
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .text("Year")
+      .attr('transform', 'translate(' + width + ', 0)');
+
+//add the y axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("smallpox cases in Alabama");
+
+
+});// end disease=="po"
+}
+
+else if(disease=="me"){
+     d3.csv("line3.csv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = parseDate(d.date);
+
+    if(state=="Alabama") {
+      d.Alabama = +d.Alabama;
+    } else if (state=="Alaska") {
+      d.Alabama = +d.Alaska;
+    } else if (state=="Arizona") {
+      d.Alabama = +d.Arizona;
+    } else if (state=="Arkansas") {
+      d.Alabama = +d.Arkansas;
+    } else if (state=="California") {
+      d.Alabama = +d.California;
+    } else if (state=="Colorado") {
+      d.Alabama = +d.Colorado;
+    } else if (state=="Connecticut") {
+      d.Alabama = +d.Connecticut;
+    } else if (state=="Delaware") {
+      d.Alabama = +d.Delaware;
+    } else if (state=="District_of_Columbia") {
+      d.Alabama = +d.District_of_Columbia;
+    } else if (state=="Florida") {
+      d.Alabama = +d.Florida;
+    } else if (state=="Georgia") {
+      d.Alabama = +d.Georgia;
+    } else if (state=="Hawaii") {
+      d.Alabama = +d.Hawaii;
+    } else if (state=="Idaho") {
+      d.Alabama = +d.Idaho;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Illinois") {
+      d.Alabama = +d.Illinois;
+    } else if (state=="Indiana") {
+      d.Alabama = +d.Indiana;
+    } else if (state=="Iowa") {
+      d.Alabama = +d.Iowa;
+    } else if (state=="Kansas") {
+      d.Alabama = +d.Kansas;
+    } else if (state=="Kentucky") {
+      d.Alabama = +d.Kentucky;
+    } else if (state=="Louisiana") {
+      d.Alabama = +d.Louisiana;
+    } else if (state=="Maine") {
+      d.Alabama = +d.Maine;
+    } else if (state=="Maryland") {
+      d.Alabama = +d.Maryland;
+    } else if (state=="Massachusetts") {
+      d.Alabama = +d.Massachusetts;
+    } else if (state=="Michigan") {
+      d.Alabama = +d.Michigan;
+    } else if (state=="Minnesota") {
+      d.Alabama = +d.Minnesota;
+    } else if (state=="Mississippi") {
+      d.Alabama = +d.Mississippi;
+    } else if (state=="Missouri") {
+      d.Alabama = +d.Missouri;
+    } else if (state=="Montana") {
+      d.Alabama = +d.Montana;
+    } else if (state=="Nebraska") {
+      d.Alabama = +d.Nebraska;
+    } else if (state=="Nevada") {
+      d.Alabama = +d.Nevada;
+    } else if (state=="New_Hampshire") {
+      d.Alabama = +d.New_Hampshire;
+    } else if (state=="New_Jersey") {
+      d.Alabama = +d.New_Jersey;
+    } else if (state=="New_Mexico") {
+      d.Alabama = +d.New_Mexico;
+    } else if (state=="New_York") {
+      d.Alabama = +d.New_York;
+    } else if (state=="North_Carolina") {
+      d.Alabama = +d.North_Carolina;
+    } else if (state=="North_Dakota") {
+      d.Alabama = +d.North_Dakota;
+    } else if (state=="Ohio") {
+      d.Alabama = +d.Ohio;
+    } else if (state=="Oklahoma") {
+      d.Alabama = +d.Oklahoma;
+    } else if (state=="Oregon") {
+      d.Alabama = +d.Oregon;
+    } else if (state=="Pennsylvania") {
+      d.Alabama = +d.Pennsylvania;
+    } else if (state=="Rhode_Island") {
+      d.Alabama = +d.Rhode_Island;
+    } else if (state=="South_Carolina") {
+      d.Alabama = +d.South_Carolina;
+    } else if (state=="South_Dakota") {
+      d.Alabama = +d.South_Dakota;
+    } else if (state=="Tennessee") {
+      d.Alabama = +d.Tennessee;
+    } else if (state=="Texas") {
+      d.Alabama = +d.Texas;
+    } else if (state=="Utah") {
+      d.Alabama = +d.Utah;
+    } else if (state=="Vermont") {
+      d.Alabama = +d.Vermont;
+    } else if (state=="Virginia") {
+      d.Alabama = +d.Virginia;
+    } else if (state=="Washington") {
+      d.Alabama = +d.Washington;
+    } else if (state=="West_Virginia") {
+      d.Alabama = +d.West_Virginia;
+    } else if (state=="Wisconsin") {
+      d.Alabama = +d.Wisconsin;
+    } else if (state=="Wyoming") {
+      d.Alabama = +d.Wyoming;
+    } 
+
+  });
+
+//scale the range of data
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([0, d3.max(data, function(d) { return d.Alabama ;})]);
+
+//add the line path
+  svg.append("path")    
+    .attr("class", "line")
+    .attr("d", line(data));
+
+  svg.selectAll("dot")
+        .data(data)
+        .enter().append("circle")
+        .attr("r", 3.5)
+        .attr("cx", function(d) { return x(d.date); }) .attr("cy", function(d) { return y(d.Alabama); })
+        .on("mouseover", function(d) {
+            div.transition()
+               .duration(200)
+               .style("opacity", .7);
+            div.html("Year:"+formatTime(d.date) + "<br/>" + "Cases:"+d.Alabama)
+               .style("left", (d3.event.pageX) + "px")
+               .style("top", (d3.event.pageY)  + "px");
+              })
+        .on("mouseout", function(d) { div.transition()
+        .duration(500)
+        .style("opacity", 0);
+});
+ 
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .text("Year")
+      .attr('transform', 'translate(' + width + ', 0)');
+
+//add the y axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+      .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("smallpox cases in Alabama");
+
+
+});// end disease=="po"
+}
+
+}//end getValue
+</script>
+</head>
+
+<body>
+<h1 align="center">The Trends of Diseases Across The Years</h1>
+<div align="center">
+<form name="myform" method="post">
+
+Disease:
+<select name="optone" id="disease" size="1" onchange="setOptions(document.myform.optone.options[document.myform.optone.selectedIndex].value);">
+<option value="">----</option>
+<option value="sm">Smallpox</option>
+<option value="po">Polio</option>
+<option value="me">Measles</option>
+</select>
+
+State:
+<select id="state">
+<option value="Alabama">Alabama</option>
+          <option value="Alaska">Alaska</option>
+          <option value="Arizona">Arizona</option>
+          <option value="Arkansas">Arkansas</option>
+          <option value="California">California</option>
+          <option value="Colorado">Colorado</option>
+          <option value="Connecticut">Connecticut</option>
+          <option value="Delaware">Delaware</option>
+          <option value="District_of_Columbia">District of Columbia</option>
+          <option value="Florida">Florida</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Hawaii">Hawaii</option>
+          <option value="Idaho">Idaho</option>
+          <option value="Illinois">Illinois</option>
+          <option value="Indiana">Indiana</option>
+          <option value="Iowa">Iowa</option>
+          <option value="Kansas">Kansas</option>
+          <option value="Kentucky">Kentucky</option>
+          <option value="Louisiana">Louisiana</option>
+          <option value="Maine">Maine</option>
+          <option value="Maryland">Maryland</option>
+          <option value="Massachusetts">Massachusetts</option>
+          <option value="Michigan">Michigan</option>
+          <option value="Minnesota">Minnesota</option>
+          <option value="Mississippi">Mississippi</option>
+          <option value="Missouri">Missouri</option>
+          <option value="Montana">Montana</option>
+          <option value="Nebraska">Nebraska</option>
+          <option value="Nevada">Nevada</option>
+          <option value="New_Hampshire">New Hampshire</option>
+          <option value="New_Jersey">New Jersey</option>
+          <option value="New_Mexico">New Mexico</option>
+          <option value="New_York">New York</option>
+          <option value="North_Carolina">North Carolina</option>
+          <option value="North_Dakota">North Dakota</option>
+          <option value="Ohio">Ohio</option>
+          <option value="Oklahoma">Oklahoma</option>
+          <option value="Oregon">Oregon</option>
+          <option value="Pennsylvania">Pennsylvania</option>
+          <option value="Rhode_Island">Rhode Island</option>
+          <option value="South_Carolina">South Carolina</option>
+          <option value="South_Dakota">South Dakota</option>
+          <option value="Tennessee">Tennessee</option>
+          <option value="Texas">Texas</option>
+          <option value="Utah">Utah</option>
+          <option value="Vermont">Vermont</option>
+          <option value="Virginia">Virginia</option>
+          <option value="Washington">Washington</option>
+          <option value="West_Virginia">West Virginia</option>
+          <option value="Wisconsin">Wisconsin</option>
+          <option value="Wyoming">Wyoming</option>
+</select>
+<button type="button" onclick="getValue()" >Choose</button>
+</form>
+</div>
+
+<p style="text-align:right"><a href="file:///Users/fujun/Dropbox/Visual/Final_Project/Index.html" style="text-decoration:none, font-size:50%">Back to index</font></a></p>
+</body>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+
+<html>
+
+<meta charset="utf-8">
+<head>
+<style>
+
+ {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+  width: 960px;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar:hover {
+  fill: orangered ;
+}
+
+.bar {
+  fill: steelblue;
+  fill-opacity: .9;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+</style>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<script>
+            
+        function setOptions(chosen){
+            
+        var selbox = document.myform.opttwo;
+        selbox.options.length = 0;
+        
+        if (chosen === "-1 ") {
+        selbox.options[selbox.options.length] = new Option('Please select one of the disease first',' ');
+ 
+        }
+        
+        if (chosen === "sm") {
+        selbox.options[selbox.options.length] = new
+        Option("--select--","-1"); 
+        selbox.options[selbox.options.length] = new
+        Option("1927","a");
+        selbox.options[selbox.options.length] = new
+        Option("1928","b");
+        selbox.options[selbox.options.length] = new
+        Option("1929","c");
+        selbox.options[selbox.options.length] = new
+        Option("1930","d");
+        selbox.options[selbox.options.length] = new
+        Option("1931","e");
+        selbox.options[selbox.options.length] = new
+        Option("1932","f");
+        selbox.options[selbox.options.length] = new
+        Option("1933","g");
+        selbox.options[selbox.options.length] = new
+        Option("1934","h");
+        selbox.options[selbox.options.length] = new
+        Option("1935","i");
+        selbox.options[selbox.options.length] = new
+        Option("1936","j");
+        selbox.options[selbox.options.length] = new
+        Option("1937","k");
+        selbox.options[selbox.options.length] = new
+        Option("1938","l");
+        selbox.options[selbox.options.length] = new
+        Option("1939","m");
+        selbox.options[selbox.options.length] = new
+        Option("1940","n");
+        selbox.options[selbox.options.length] = new
+        Option("1941","o");
+        selbox.options[selbox.options.length] = new
+        Option("1942","p");
+
+        }
+
+        if (chosen === "po") {
+        selbox.options[selbox.options.length] = new
+        Option("--select--","-1"); 
+        selbox.options[selbox.options.length] = new
+        Option("1947","a");
+        selbox.options[selbox.options.length] = new
+        Option("1948","b");
+        selbox.options[selbox.options.length] = new
+        Option("1949","c");
+        selbox.options[selbox.options.length] = new
+        Option("1950","d");
+        selbox.options[selbox.options.length] = new
+        Option("1951","e");
+        selbox.options[selbox.options.length] = new
+        Option("1952","f");
+        selbox.options[selbox.options.length] = new
+        Option("1953","g");
+        selbox.options[selbox.options.length] = new
+        Option("1954","h");
+        selbox.options[selbox.options.length] = new
+        Option("1955","i");
+        selbox.options[selbox.options.length] = new
+        Option("1956","j");
+        selbox.options[selbox.options.length] = new
+        Option("1957","k");
+        selbox.options[selbox.options.length] = new
+        Option("1958","l");
+        selbox.options[selbox.options.length] = new
+        Option("1959","m");
+        selbox.options[selbox.options.length] = new
+        Option("1960","n");
+        selbox.options[selbox.options.length] = new
+        Option("1961","o");
+        selbox.options[selbox.options.length] = new
+        Option("1962","p");
+        
+        }
+
+        if (chosen === "me") {
+        selbox.options[selbox.options.length] = new
+        Option("--select--","-1"); 
+        selbox.options[selbox.options.length] = new
+        Option("1954","a");
+        selbox.options[selbox.options.length] = new
+        Option("1955","b");
+        selbox.options[selbox.options.length] = new
+        Option("1956","c");
+        selbox.options[selbox.options.length] = new
+        Option("1957","d");
+        selbox.options[selbox.options.length] = new
+        Option("1958","e");
+        selbox.options[selbox.options.length] = new
+        Option("1959","f");
+        selbox.options[selbox.options.length] = new
+        Option("1960","g");
+        selbox.options[selbox.options.length] = new
+        Option("1961","h");
+        selbox.options[selbox.options.length] = new
+        Option("1962","i");
+        selbox.options[selbox.options.length] = new
+        Option("1963","j");
+        selbox.options[selbox.options.length] = new
+        Option("1964","k");
+        selbox.options[selbox.options.length] = new
+        Option("1965","l");
+        selbox.options[selbox.options.length] = new
+        Option("1966","m");
+        selbox.options[selbox.options.length] = new
+        Option("1967","n");
+        selbox.options[selbox.options.length] = new
+        Option("1968","o");
+        selbox.options[selbox.options.length] = new
+        Option("1969","p");
+        
+        }  
+
+       
+        
+    }
+    </script>
+<script>
+
+function getValue(){
+
+  d3.select("svg").remove()
+
+  var e1 = document.getElementById("disease");
+var disease = e1.options[e1.selectedIndex].value;
+
+ var e2 = document.getElementById("year");
+var date = e2.options[e2.selectedIndex].value;
+
+
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+//var formatPercent = d3.format(".0%");
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1, 1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+/*
+var y = d3.scale.linear()
+    .range([height, 0]);
+*/
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+    //.tickFormat(formatPercent);
+    //.ticks()
+
+var tip = d3.tip()
+  .attr('class', 'd3-tip')
+  .offset([-10, 0])
+  .html(function(d) {
+    return "<strong>Infection Case:</strong> <span style='color:red'>" + d.frequency + "</span>";
+  })
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.call(tip);
+
+
+
+if(disease=="sm"){
+
+d3.csv("bar1.csv", function(error, data) {
+
+data.forEach(function(d) {
+
+    if(date == "a"){
+            d.frequency = +d.a;
+          }else if(date == "b"){
+            d.frequency = +d.b;
+          }else if(date == "c"){
+            d.frequency = +d.c;
+          }else if(date == "d"){
+            d.frequency = +d.d;
+          }else if(date == "e"){
+            d.frequency = +d.e;
+          }else if(date == "f"){
+            d.frequency = +d.f;
+          }else if(date == "g"){
+            d.frequency = +d.g;
+          }else if(date == "h"){
+            d.frequency = +d.h;
+          }else if(date == "j"){
+            d.frequency = +d.j;
+          }else if(date == "k"){
+            d.frequency = +d.k;
+          }else if(date == "l"){
+            d.frequency = +d.l;
+          }else if(date == "m"){
+            d.frequency = +d.m;
+          }else if(date == "n"){
+            d.frequency = +d.n;
+          }else if(date == "o"){
+            d.frequency = +d.o;
+          }else if(date == "p"){
+            d.frequency = +d.p;
+          }
+
+  });
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Infection Case");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
+
+      function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+  d3.select("input").on("change", change);
+
+  var sortTimeout = setTimeout(function() {
+    d3.select("input").property("checked", true).each(change);
+  }, 2000);
+
+  function change() {
+    clearTimeout(sortTimeout);
+
+    // Copy-on-write since tweens are evaluated after a delay.
+    var x0 = x.domain(data.sort(this.checked
+        ? function(a, b) { return b.frequency - a.frequency; }
+        : function(a, b) { return d3.ascending(a.letter, b.letter); })
+        .map(function(d) { return d.letter; }))
+        .copy();
+
+    var transition = svg.transition().duration(750),
+        delay = function(d, i) { return i * 50; };
+
+    transition.selectAll(".bar")
+        .delay(delay)
+        .attr("x", function(d) { return x0(d.letter); });
+
+    transition.select(".x.axis")
+        .call(xAxis)
+      .selectAll("g")
+        .delay(delay);
+  }
+})
+}
+else if(disease=="po"){
+
+d3.csv("bar2.csv", function(error, data) {
+
+data.forEach(function(d) {
+
+    if(date == "a"){
+            d.frequency = +d.a;
+          }else if(date == "b"){
+            d.frequency = +d.b;
+          }else if(date == "c"){
+            d.frequency = +d.c;
+          }else if(date == "d"){
+            d.frequency = +d.d;
+          }else if(date == "e"){
+            d.frequency = +d.e;
+          }else if(date == "f"){
+            d.frequency = +d.f;
+          }else if(date == "g"){
+            d.frequency = +d.g;
+          }else if(date == "h"){
+            d.frequency = +d.h;
+          }else if(date == "j"){
+            d.frequency = +d.j;
+          }else if(date == "k"){
+            d.frequency = +d.k;
+          }else if(date == "l"){
+            d.frequency = +d.l;
+          }else if(date == "m"){
+            d.frequency = +d.m;
+          }else if(date == "n"){
+            d.frequency = +d.n;
+          }else if(date == "o"){
+            d.frequency = +d.o;
+          }else if(date == "p"){
+            d.frequency = +d.p;
+          }
+
+  });
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Infection Case");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
+
+      function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+  d3.select("input").on("change", change);
+
+  var sortTimeout = setTimeout(function() {
+    d3.select("input").property("checked", true).each(change);
+  }, 2000);
+
+  function change() {
+    clearTimeout(sortTimeout);
+
+    // Copy-on-write since tweens are evaluated after a delay.
+    var x0 = x.domain(data.sort(this.checked
+        ? function(a, b) { return b.frequency - a.frequency; }
+        : function(a, b) { return d3.ascending(a.letter, b.letter); })
+        .map(function(d) { return d.letter; }))
+        .copy();
+
+    var transition = svg.transition().duration(750),
+        delay = function(d, i) { return i * 50; };
+
+    transition.selectAll(".bar")
+        .delay(delay)
+        .attr("x", function(d) { return x0(d.letter); });
+
+    transition.select(".x.axis")
+        .call(xAxis)
+      .selectAll("g")
+        .delay(delay);
+  }
+})
+}
+else if(disease=="me"){
+
+d3.csv("bar3.csv", function(error, data) {
+
+data.forEach(function(d) {
+
+    if(date == "a"){
+            d.frequency = +d.a;
+          }else if(date == "b"){
+            d.frequency = +d.b;
+          }else if(date == "c"){
+            d.frequency = +d.c;
+          }else if(date == "d"){
+            d.frequency = +d.d;
+          }else if(date == "e"){
+            d.frequency = +d.e;
+          }else if(date == "f"){
+            d.frequency = +d.f;
+          }else if(date == "g"){
+            d.frequency = +d.g;
+          }else if(date == "h"){
+            d.frequency = +d.h;
+          }else if(date == "j"){
+            d.frequency = +d.j;
+          }else if(date == "k"){
+            d.frequency = +d.k;
+          }else if(date == "l"){
+            d.frequency = +d.l;
+          }else if(date == "m"){
+            d.frequency = +d.m;
+          }else if(date == "n"){
+            d.frequency = +d.n;
+          }else if(date == "o"){
+            d.frequency = +d.o;
+          }else if(date == "p"){
+            d.frequency = +d.p;
+          }
+
+  });
+
+  x.domain(data.map(function(d) { return d.letter; }));
+  y.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Infection Case");
+
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.letter); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.frequency); })
+      .attr("height", function(d) { return height - y(d.frequency); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide);
+
+      function type(d) {
+  d.frequency = +d.frequency;
+  return d;
+}
+
+  d3.select("input").on("change", change);
+
+  var sortTimeout = setTimeout(function() {
+    d3.select("input").property("checked", true).each(change);
+  }, 2000);
+
+  function change() {
+    clearTimeout(sortTimeout);
+
+    // Copy-on-write since tweens are evaluated after a delay.
+    var x0 = x.domain(data.sort(this.checked
+        ? function(a, b) { return b.frequency - a.frequency; }
+        : function(a, b) { return d3.ascending(a.letter, b.letter); })
+        .map(function(d) { return d.letter; }))
+        .copy();
+
+    var transition = svg.transition().duration(750),
+        delay = function(d, i) { return i * 50; };
+
+    transition.selectAll(".bar")
+        .delay(delay)
+        .attr("x", function(d) { return x0(d.letter); });
+
+    transition.select(".x.axis")
+        .call(xAxis)
+      .selectAll("g")
+        .delay(delay);
+  }
+})
+}
+
+
+
+
+}
+
+</script>
+</head>
+<body>
+<h1 align="center">The Comparisons for The Diseases among The States</h1>
+<div align="center">
+<form name="myform" method="post">
+Disease:
+<select name="optone" id="disease" size="1" onchange="setOptions(document.myform.optone.options[document.myform.optone.selectedIndex].value);">
+<option value="">----</option>
+<option value="sm">Smallpox</option>
+<option value="po">Polio</option>
+<option value="me">Measles</option>
+</select>
+
+Year:
+<select name="opttwo" id="year" size="1">
+<option value=" -1" selected="selected">Please select one of the options above first</option>
+</select>
+<button type="button" onclick="getValue()" >Choose</button>
+<input type="checkbox" > Sort values</input>
+
+</form>
+</div>
+
+<p style="text-align:right"><a href="file:///Users/fujun/Dropbox/Visual/Final_Project/Index.html" style="text-decoration:none, font-size:50%">Back to index</font></a></p>
+</body>
+
+
+</html>
